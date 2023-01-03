@@ -19,7 +19,7 @@ class AnotacionModel {
   String? nombre;
   String? texto;
   bool? isRecordatorio;
-  String? fechaRecordatorio;
+  DateTime? fechaRecordatorio;
 
   factory AnotacionModel.fromJson(Map<String, dynamic> json) => AnotacionModel(
     nombre: json["nombre"],
@@ -35,18 +35,34 @@ class AnotacionModel {
     "fechaRecordatorio": fechaRecordatorio,
   };
 
-  void registrarAnotacion(){
-    throw UnimplementedError();
+  Future<String?> registrarAnotacion() async {
+    try {
+      //TODO: Conectar a la base de datos y registrar... retorna null si registra correctamente
+      return null;
+    }catch (e){
+      return e.toString();
+    }
 
   }
 
-  AnotacionModel actualizarAnotacion(){
-    throw UnimplementedError();
+  Future<String?> actualizarAnotacion() async {
+    try {
+      //TODO: Conectar a la base de datos y actualiza... retorna null si actualiza correctamente
+      return null;
+    }catch (e){
+      return e.toString();
+    }
 
   }
 
   AnotacionModel verAnotacion(){
+    //TODO: hacer el metodo ver
     throw UnimplementedError();
 
+  }
+
+  @override
+  String toString() {
+    return 'AnotacionModel{nombre: $nombre, texto: $texto, isRecordatorio: $isRecordatorio, fechaRecordatorio: $fechaRecordatorio}';
   }
 }

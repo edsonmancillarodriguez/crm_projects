@@ -1,6 +1,5 @@
 import 'package:crm_projects/cu1_gestionar_estudiantes_nuevos/estudiante_view.dart';
-import 'package:crm_projects/cu3_gestionar_recordatorios/recordatorios_view.dart';
-import 'package:crm_projects/cu4_gestionar_anotaciones/anotacionesView.dart';
+import 'package:crm_projects/cu4_gestionar_anotaciones/anotaciones_view.dart';
 import 'package:crm_projects/cu5_listas_estudiantes_registrados_asignaciones_promotores/lista_estudiantes_view.dart';
 import 'package:crm_projects/cu6_gestion_roles_usuarios/lista_usuarios_view.dart';
 import 'package:crm_projects/cu7_gestion_carreras_universitarias/carreras_view.dart';
@@ -38,13 +37,6 @@ class MenuWidget extends StatelessWidget {
             trailing: const Icon(Icons.arrow_circle_right_outlined),
             onTap: () => Navigator.pushNamedAndRemoveUntil(
                 context, const EstudianteView().routeName, (route) => false),
-          ),
-          ListTile(
-            title: const Text('cu3 Recordatorios '),
-            leading: const Icon(Icons.remember_me_outlined),
-            trailing: const Icon(Icons.arrow_circle_right_outlined),
-            onTap: () => Navigator.pushNamedAndRemoveUntil(
-                context, const RecordatoriosView().routeName, (route) => false),
           ),
           ListTile(
             title: const Text('cu4 Anotaciones '),

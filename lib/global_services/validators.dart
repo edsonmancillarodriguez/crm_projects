@@ -32,4 +32,22 @@ class Validators{
         ? null
         : message;
   }
+
+  String? textValidator(String? value, String? message){
+    if (value!.isEmpty) {
+      return 'Por favor ingrese un valor';
+    }
+    return null;
+  }
+
+  String? numberValidator(String? value, String? message){
+    if (value!.isEmpty) {
+      return 'Por favor ingrese un número';
+    }
+    final number = int.tryParse(value);
+    if (number == null) {
+      return 'Por favor ingrese un número válido';
+    }
+    return null;
+  }
 }

@@ -19,7 +19,7 @@ class CarreraModel {
 
   String? id;
   String? nombre;
-  bool? sigla;
+  String? sigla;
   int? nModulos;
   String? modalidad;
 
@@ -39,23 +39,45 @@ class CarreraModel {
     "modalidad": modalidad,
   };
 
-  void registrarCarrera(){
-    throw UnimplementedError();
+  Future<String?> registrarCarrera() async {
+    try {
+      //TODO: conectar a base de datos y registrar, retornara null si registra correctamente
+      return null;
+    }catch  (e){
+      return e.toString();
+    }
 
   }
 
-  void actualizarCarrera(){
-    throw UnimplementedError();
+  Future<String?> actualizarCarrera() async {
+    try {
+      //TODO: Conecta a base de datos y actualiza, retorna null si actuaiza correctamente.
+      return null;
+    }catch (e){
+      return e.toString();
+    }
 
   }
 
   CarreraModel verCarrera(String id){
-    throw UnimplementedError();
+    return CarreraModel(
+      id: id,
+      nombre: 'Carrera $id',
+      modalidad: 'Virtutal',
+      nModulos: 60,
+      sigla: 'CV${id}00'
+    );
 
   }
 
-  List<CarreraModel> listarCarreras(){
-    throw UnimplementedError();
-
+  ///Retorna un Objeto de tipo [List<CarreraModel>] si esta correcto.
+  ///Retorna un Objeto de tipo [String], si ocurre algun error.
+  Future<Object> listarCarreras() async {
+    //TODO: obtiene todas las carreras registradas y las retorna en una Lista ordenada.
+    try {
+      return <CarreraModel>[];
+    }catch (e){
+      return e.toString();
+    }
   }
 }

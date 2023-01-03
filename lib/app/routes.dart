@@ -1,9 +1,10 @@
 import 'package:crm_projects/cu1_gestionar_estudiantes_nuevos/estudiante_view.dart';
 import 'package:crm_projects/cu3_gestionar_recordatorios/recordatorios_view.dart';
-import 'package:crm_projects/cu4_gestionar_anotaciones/anotacionesView.dart';
+import 'package:crm_projects/cu4_gestionar_anotaciones/anotaciones_view.dart';
 import 'package:crm_projects/cu5_listas_estudiantes_registrados_asignaciones_promotores/lista_estudiantes_view.dart';
 import 'package:crm_projects/cu6_gestion_roles_usuarios/lista_usuarios_view.dart';
 import 'package:crm_projects/cu7_gestion_carreras_universitarias/carreras_view.dart';
+import 'package:crm_projects/cu7_gestion_carreras_universitarias/estudiantes_por_carreras_view.dart';
 import 'package:crm_projects/cu8_ver_reportes_estadisticas/ver_reportes_view.dart';
 import 'package:crm_projects/log_in_out/log_in.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class ListRoutes {
     const ListaUsuariosView().routeName: (context) => const ListaUsuariosView(),
     //cu7 gestion de carreras universitarias
     const CarrerasView().routeName: (context) => const CarrerasView(),
+    const EstudiantesPorCarrerasView().routeName : (context) => const EstudiantesPorCarrerasView(),
     //cu8 ver reportes y estadisticas
     const VerReportesView().routeName: (context) => const VerReportesView(),
     //Log in / out
