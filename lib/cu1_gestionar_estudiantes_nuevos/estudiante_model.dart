@@ -4,6 +4,9 @@
 
 import 'dart:convert';
 
+import 'package:crm_projects/global_services/generate_code.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 EstudianteModel estudianteModelFromJson(String str) =>
     EstudianteModel.fromJson(json.decode(str));
 
@@ -17,6 +20,7 @@ class EstudianteModel {
     this.telefono,
     this.dni,
     this.refTelefono,
+    this.codigoDB,
   });
 
   String? nombre;
@@ -24,6 +28,7 @@ class EstudianteModel {
   String? telefono;
   String? dni;
   String? refTelefono;
+  String? codigoDB;
 
   factory EstudianteModel.fromJson(Map<String, dynamic> json) =>
       EstudianteModel(
@@ -32,6 +37,7 @@ class EstudianteModel {
         telefono: json["telefono"],
         dni: json["dni"],
         refTelefono: json["refTelefono"],
+        codigoDB: json["codigoDB"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -40,6 +46,7 @@ class EstudianteModel {
         "telefono": telefono,
         "dni": dni,
         "refTelefono": refTelefono,
+        "codigoDB": codigoDB,
       };
 
   ///Retorna null "si registro correctamente en base de dato"
@@ -49,6 +56,10 @@ class EstudianteModel {
     //retorna null si registro correctamente o si no registro retorna el errorMessage
     try {
       //TODO: Conectar a la base de datos y registrar... retorna null si registra correctamente
+
+      DatabaseReference ref = FirebaseDatabase.instance.ref("estudiantes");
+      codigoDB = generateCode();
+      await ref.child(codigoDB!).set(toJson());
       return null;
     } catch (e) {
       return e.toString();
@@ -58,15 +69,12 @@ class EstudianteModel {
   Future<String?> actualizarEstudiante() async {
     try {
       //TODO: Conectar a la base de datos y actualizar... retorna null si registra correctamente
+      DatabaseReference ref = FirebaseDatabase.instance.ref("estudiantes");
+      await ref.child(codigoDB!).set(toJson());
       return null;
     } catch (e) {
       return e.toString();
     }
-  }
-
-  EstudianteModel verEstudiante() {
-    //TODO: Hacer el metodo ver
-    throw UnimplementedError();
   }
 
   @override

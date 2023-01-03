@@ -2,31 +2,24 @@
 //
 //     final usuarioModel = usuarioModelFromJson(jsonString);
 
-import 'dart:convert';
-
-UsuarioModel usuarioModelFromJson(String str) => UsuarioModel.fromJson(json.decode(str));
-
-String usuarioModelToJson(UsuarioModel data) => json.encode(data.toJson());
-
 class UsuarioModel {
-  UsuarioModel({
-    this.uid,
-    this.nombre,
-    this.dni,
-    this.telefono,
-  });
+
+  static final UsuarioModel _instance = UsuarioModel._internal();
+
+  factory UsuarioModel() => _instance;
+  UsuarioModel._internal();
 
   String? uid;
   String? nombre;
-  bool? dni;
+  String? dni;
   String? telefono;
 
-  factory UsuarioModel.fromJson(Map<String, dynamic> json) => UsuarioModel(
-    uid: json["uid"],
-    nombre: json["nombre"],
-    dni: json["dni"],
-    telefono: json["telefono"],
-  );
+  // factory UsuarioModel.fromJson(Map<String, dynamic> json) => UsuarioModel(
+  //   uid: json["uid"],
+  //   nombre: json["nombre"],
+  //   dni: json["dni"],
+  //   telefono: json["telefono"],
+  // );
 
   Map<String, dynamic> toJson() => {
     "uid": uid,

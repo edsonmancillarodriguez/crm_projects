@@ -2,13 +2,17 @@ import 'package:crm_projects/cu1_gestionar_estudiantes_nuevos/estudiante_view.da
 import 'package:crm_projects/cu4_gestionar_anotaciones/anotaciones_view.dart';
 import 'package:crm_projects/cu5_listas_estudiantes_registrados_asignaciones_promotores/lista_estudiantes_view.dart';
 import 'package:crm_projects/cu6_gestion_roles_usuarios/lista_usuarios_view.dart';
+import 'package:crm_projects/cu6_gestion_roles_usuarios/usuario_model.dart';
 import 'package:crm_projects/cu7_gestion_carreras_universitarias/carreras_view.dart';
 import 'package:crm_projects/cu8_ver_reportes_estadisticas/ver_reportes_view.dart';
+import 'package:crm_projects/global_services/show_snack_bar_widget.dart';
 import 'package:crm_projects/log_in_out/log_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MenuWidget extends StatelessWidget {
-  const MenuWidget({Key? key}) : super(key: key);
+  MenuWidget({Key? key}) : super(key: key);
+  final usuario = UsuarioModel();
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +24,21 @@ class MenuWidget extends StatelessWidget {
               child: Icon(Icons.person_outline, size: 50),
             ),
             otherAccountsPictures: [
-              IconButton(color: Colors.white,
+              IconButton(
+                  color: Colors.white,
                   onPressed: () {
-                //TODO: Cerrar Sesion
-                    Navigator.pushNamedAndRemoveUntil(
-                      context, Login().routeName, (route) => false);
+                    FirebaseAuth.instance.signOut().then((value) {
+                      showSnackBarWidget(
+                          context: context,
+                          message: 'Sesion cerrada con exito');
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, Login().routeName, (route) => false);
+                    });
                   },
                   icon: const Icon(Icons.power_settings_new))
             ],
-            accountName: const Text('accountName'),
-            accountEmail: const Text('accountEmail'),
+            accountName: Text('Nombre: ${usuario.nombre}'),
+            accountEmail: Text('Correo: ${usuario.dni}'),
           ),
           ListTile(
             title: const Text('cu1 Estudiantes '),

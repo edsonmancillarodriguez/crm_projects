@@ -1,8 +1,10 @@
 import 'package:crm_projects/cu1_gestionar_estudiantes_nuevos/estudiante_controller.dart';
 import 'package:crm_projects/cu1_gestionar_estudiantes_nuevos/estudiante_form_widget.dart';
 import 'package:crm_projects/cu3_gestionar_recordatorios/recordatorios_view.dart';
+import 'package:crm_projects/cu6_gestion_roles_usuarios/usuario_model.dart';
 import 'package:crm_projects/global_widgets/menu_widget.dart';
 import 'package:crm_projects/cu1_gestionar_estudiantes_nuevos/estudiante_model.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class EstudianteView extends StatefulWidget {
@@ -16,6 +18,7 @@ class EstudianteView extends StatefulWidget {
 
 class _EstudianteViewState extends State<EstudianteView> {
   List<EstudianteModel> listaEstudiantes = [];
+  final usuario = UsuarioModel();
 
   @override
   void initState() {
@@ -37,8 +40,6 @@ class _EstudianteViewState extends State<EstudianteView> {
             child: ElevatedButton.icon(
               icon: const Icon(Icons.person_add),
               onPressed: () async {
-                //tiene que esperar el resultado del dialogo, y si es exitoso entonces actualiza la vista y muestra el snackBarMessage
-                //si hay errores lo muestra en el snackBarMessage y no actualiza la vista
                 await showDialog<String?>(
                   context: context,
                   builder: (context) {
@@ -55,9 +56,10 @@ class _EstudianteViewState extends State<EstudianteView> {
           ),
         ],
       ),
-      drawer: const MenuWidget(),
+      drawer: MenuWidget(),
       body: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 100.0, vertical: 50.0), //mejorar la vista ux para telefonos
+        padding: const EdgeInsets.symmetric(horizontal: 100.0, vertical: 50.0),
+        //mejorar la vista ux para telefonos
         itemCount: listaEstudiantes.length,
         itemBuilder: (context, index) => SizedBox(
           child: Card(
@@ -72,7 +74,9 @@ class _EstudianteViewState extends State<EstudianteView> {
                     message: 'CU3 Gestionar Recordatorios',
                     child: IconButton(
                         onPressed: () async {
-                          Navigator.pushNamed(context, const RecordatoriosView().routeName, arguments: listaEstudiantes[index]);
+                          Navigator.pushNamed(
+                              context, const RecordatoriosView().routeName,
+                              arguments: listaEstudiantes[index]);
                         },
                         icon: const Icon(Icons.sticky_note_2)),
                   ),
@@ -120,10 +124,17 @@ class _EstudianteViewState extends State<EstudianteView> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text('Seguro que desea eliminar al usuario ${listaEstudiantes[index].nombre}'),
+                                title: Text(
+                                    'Seguro que desea eliminar al usuario ${listaEstudiantes[index].nombre}'),
                                 actions: [
-                                  ElevatedButton(onPressed: (){}, child: const Text('SI, Eliminar')),
-                                  ElevatedButton(onPressed: ()=>Navigator.pop(context), child: const Text('Cancelar'))
+                                  ElevatedButton(
+                                      onPressed: () => EstudianteController().eliminarEstudiante(listaEstudiantes[index].codigoDB!).then((value) {
+                                        Navigator.pop(context);
+                                      }),
+                                      child: const Text('SI, Eliminar')),
+                                  ElevatedButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text('Cancelar'))
                                 ],
                               );
                             },
@@ -156,9 +167,27 @@ class _EstudianteViewState extends State<EstudianteView> {
   }
 
   Future<void> listarEstudiantes() async {
-    listaEstudiantes = (await EstudianteController().listarEstudiante()) ?? [];
-    setState(() {
-      listaEstudiantes;
+    DatabaseReference starCountRef =
+        FirebaseDatabase.instance.ref('estudiantes');
+    starCountRef.onValue.listen((DatabaseEvent event) {
+      final data = event.snapshot.value as Map<String, dynamic>?;
+      if (data != null) {
+        listaEstudiantes.clear();
+        data.forEach((key, value) {
+          listaEstudiantes.add(EstudianteModel(
+            nombre: value['nombre'],
+            refTelefono: value['refTelefono'],
+            telefono: value['telefono'],
+            dni: value['dni'],
+            correo: value['correo'],
+            codigoDB: value['codigoDB'],
+          ));
+        });
+        setState(() {
+          listaEstudiantes;
+        });
+      }
     });
+
   }
 }

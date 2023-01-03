@@ -48,7 +48,7 @@ class _CarrerasViewState extends State<CarrerasView> {
           ),
         ],
       ),
-      drawer: const MenuWidget(),
+      drawer: MenuWidget(),
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 100.0, vertical: 50.0), //mejorar la vista ux para telefonos
         itemCount: listaCarreras.length,

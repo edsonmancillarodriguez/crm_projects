@@ -39,7 +39,7 @@ class AnotacionesView extends StatelessWidget {
           ),
         ],
       ),
-      drawer: const MenuWidget(),
+      drawer: MenuWidget(),
       body: Wrap(children: const [CardAnotacionesWidget()]),
     );
   }

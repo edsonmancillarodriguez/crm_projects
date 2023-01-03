@@ -13,7 +13,7 @@ class VerReportesView extends StatelessWidget {
         title: const Text('Ver Reportes View'),
         centerTitle: true,
       ),
-      drawer: const MenuWidget(),
+      drawer: MenuWidget(),
       body: const Center(child: Text('CU8 Ver reportes y estadisticas')),
     );
   }

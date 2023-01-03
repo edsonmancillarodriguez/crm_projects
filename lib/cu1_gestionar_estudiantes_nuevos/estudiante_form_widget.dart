@@ -141,6 +141,11 @@ class EstudianteFormWidget extends StatelessWidget {
             return;
           }
           //TODO: Actualizar Estudiante : Falta actualizar los cambios al [estudianteModel] local
+          estudianteModel!.nombre = nombre.text;
+          estudianteModel!.dni = carnetIdentidad.text;
+          estudianteModel!.telefono = telefono.text;
+          estudianteModel!.correo = correo.text;
+          estudianteModel!.refTelefono = telefonoReferencia.text;
           showSnackBarWidget(
             context: context,
             navigatorPop: true,
@@ -150,14 +155,6 @@ class EstudianteFormWidget extends StatelessWidget {
         };
       default:
         return () {
-          // if (!(formStateRegisterStudent.currentState?.validate() ?? false)) {
-          //   return;
-          // }
-          // showSnackBarWidget(
-          //   context: context,
-          //   message:
-          //       'VIENDO UN ESTUDIANTE:\nNombre: ${nombre.text}\nCorreo: ${correo.text}\nTelefono: ${telefono.text}\n Carnet de Identidad: ${carnetIdentidad.text}\nTelefono de Referencia: ${telefonoReferencia.text}',
-          // );
           Navigator.pop(context);
         };
     }

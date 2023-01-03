@@ -13,7 +13,7 @@ class ListaUsuariosView extends StatelessWidget {
         title: const Text('Lista Usuarios View'),
         centerTitle: true,
       ),
-      drawer: const MenuWidget(),
+      drawer: MenuWidget(),
       body: const Center(child: Text('CU6 Gestion de Roles de Usuarios')),
     );
   }

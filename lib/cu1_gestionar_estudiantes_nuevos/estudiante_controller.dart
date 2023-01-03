@@ -1,4 +1,5 @@
 import 'package:crm_projects/cu1_gestionar_estudiantes_nuevos/estudiante_model.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class EstudianteController {
   Future<String?> registrarEstudiante({
@@ -27,27 +28,34 @@ class EstudianteController {
         .actualizarEstudiante(); //retorna null si actualizo, false si hubo errores y manda el error
   }
 
-  EstudianteModel verEstudiante() {
+  Future<EstudianteModel?> verEstudiante(String codigoDB) async {
     //esta retornando un EstudianteModel() ejemplo
-    return EstudianteModel(
-      nombre: 'Estudiante Example',
-      correo: 'example@example.com',
-      dni: '99999999',
-      telefono: '77777777',
-      refTelefono: '8888888',
-    );
+    final ref = FirebaseDatabase.instance.ref();
+    final value = (await ref.child('estudiantes/$codigoDB').get()).value
+        as Map<String, dynamic>?;
+    if (value != null) {
+      print(value);
+      return EstudianteModel(
+        nombre: value['nombre'],
+        refTelefono: value['refTelefono'],
+        telefono: value['telefono'],
+        dni: value['dni'],
+        correo: value['correo'],
+        codigoDB: value['codigoDB'],
+      );
+    } else {
+      print('EstudianteController.verEstudianteNo data available.');
+      return null;
+    }
   }
 
-  Future<List<EstudianteModel>?> listarEstudiante() async {
-    return List<EstudianteModel>.generate(
-      10,
-      (index) => EstudianteModel(
-        nombre: 'Estudiante $index',
-        correo: 'example$index@example.com',
-        dni: '${index}99999999',
-        telefono: '${index}77777777',
-        refTelefono: '${index}8888888',
-      ),
-    );
+  Future<String?> eliminarEstudiante(String codigoDB) async{
+    try {
+      final ref = FirebaseDatabase.instance.ref();
+      await ref.child('estudiantes/$codigoDB').remove();
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
   }
 }

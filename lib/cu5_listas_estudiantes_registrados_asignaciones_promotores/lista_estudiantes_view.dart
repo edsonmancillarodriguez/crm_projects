@@ -12,7 +12,7 @@ class ListaEstudiantesView extends StatelessWidget {
         title: const Text('Lista Estudiantes View'),
         centerTitle: true,
       ),
-      drawer: const MenuWidget(),
+      drawer: MenuWidget(),
       body: const Center(child: Text('CU5 listas de estudaintes registrados y asignaciones a promotores')),
     );
   }
