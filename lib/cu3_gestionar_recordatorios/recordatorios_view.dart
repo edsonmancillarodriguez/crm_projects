@@ -1,15 +1,32 @@
 import 'package:crm_projects/cu1_gestionar_estudiantes_nuevos/estudiante_model.dart';
 import 'package:crm_projects/cu1_gestionar_estudiantes_nuevos/estudiante_view.dart';
+import 'package:crm_projects/cu3_gestionar_recordatorios/card_recordatorio_widget.dart';
 import 'package:crm_projects/cu3_gestionar_recordatorios/recordatorioModel.dart';
 import 'package:crm_projects/cu3_gestionar_recordatorios/recordatorio_form_widget.dart';
-import 'package:crm_projects/cu4_gestionar_anotaciones/card_anotaciones_widget.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class RecordatoriosView extends StatelessWidget {
+class RecordatoriosView extends StatefulWidget {
   final String routeName = 'RecordatoriosView';
 
-  const RecordatoriosView({Key? key}) : super(key: key);
+  const RecordatoriosView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<RecordatoriosView> createState() => _RecordatoriosViewState();
+}
+
+class _RecordatoriosViewState extends State<RecordatoriosView> {
+  EstudianteModel? estudiante;
+  List<RecordatorioModel> listaRecordatorios = <RecordatorioModel>[];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +51,7 @@ class RecordatoriosView extends StatelessWidget {
                     return Dialog(
                       child: RecordatorioFormWidget(
                         option: 'Registrar',
+                        estudianteCodigoDB: estudiante!.codigoDB,
                       ),
                     );
                   },
@@ -62,8 +80,29 @@ class RecordatoriosView extends StatelessWidget {
     throw UnimplementedError();
   }
 
-  List<RecordatorioModel> listarRecordatorios() {
-    throw UnimplementedError();
+  void listarRecordatorios(String codigoDB) {
+    final String path = codigoDB;
+    DatabaseReference starCountRef =
+        FirebaseDatabase.instance.ref('recordatorios');
+    starCountRef.child(path).onValue.listen((DatabaseEvent event) {
+      final data = event.snapshot.value as Map<String, dynamic>?;
+      if (data != null) {
+        listaRecordatorios.clear();
+        data.forEach((key, value) {
+          listaRecordatorios.add(RecordatorioModel(
+            nombre: value['nombre'],
+            estudianteCodigoDB: value['estudianteCodigoDB'],
+            fechaRecordatorio: DateTime.parse(value['fechaRecordatorio']),
+            isRecordatorio: value['isRecordatorio']=='true'?true:false,
+            texto: value['texto'],
+            codigoDB: value['codigoDB'],
+          ));
+        });
+        setState(() {
+          listaRecordatorios;
+        });
+      }
+    });
   }
 
   Widget _student(BuildContext context, EstudianteModel estudiante) {
@@ -112,22 +151,30 @@ class RecordatoriosView extends StatelessWidget {
                       text: '${estudiante.refTelefono!}\n',
                       style:
                           const TextStyle(fontSize: 16, color: Colors.black87)),
-                ]))
+                ])),
+                IconButton(
+                    onPressed: () => listarRecordatorios(estudiante.codigoDB!),
+                    icon: const Icon(Icons.refresh)),
               ],
             )
           ],
         )),
         Wrap(
-          children: const [
-            CardAnotacionesWidget(),
-            CardAnotacionesWidget(),
-            CardAnotacionesWidget(),
-            CardAnotacionesWidget(),
-            CardAnotacionesWidget(),
-          ],
+          children: listaRecordatoriosWidget(),
         ),
       ],
     );
+  }
+
+  List<Widget> listaRecordatoriosWidget() {
+    List<Widget> recordatorios = [];
+    listaRecordatorios.forEach((element) {
+      recordatorios.add(CardRecordatorioWidget(
+        recordatorioModel: element,
+      ));
+      setState(() {});
+    });
+    return recordatorios;
   }
 
   Widget _isArgumentsNull(BuildContext context) {

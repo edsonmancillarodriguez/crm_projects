@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class RecordatorioFormWidget extends StatefulWidget {
-  RecordatorioFormWidget({Key? key, this.recordatorioModel, required this.option})
+  RecordatorioFormWidget({Key? key, this.recordatorioModel, required this.option, this.estudianteCodigoDB})
       : super(key: key) {
     if (recordatorioModel != null) {
       switch (option) {
@@ -38,6 +38,7 @@ class RecordatorioFormWidget extends StatefulWidget {
   ///Option3: Ver, [recordatorioModel] no puede ser null
   final String option;
   final RecordatorioModel? recordatorioModel;
+  final String? estudianteCodigoDB;
   late bool? enabled = true;
 
   final TextEditingController nombre = TextEditingController();
@@ -148,11 +149,14 @@ class _RecordatorioFormWidgetState extends State<RecordatorioFormWidget> {
           //TODO: Registra un nuevo recordatorio
           showSnackBarWidget(
               context: context,
+              navigatorPop: true,
               message: (await RecordatorioController().registrarRecordatorios(
                       nombre: nombre.text,
                       texto: text.text,
                       isRecordatorio: isRecordatorio,
-                      fechaRecordatorio: fechaRecordatorio)) ??
+                      fechaRecordatorio: fechaRecordatorio,
+                estudianteCodigoDB: widget.estudianteCodigoDB
+              )) ??
                   'Registro Exitoso');
         };
       case 'Actualizar':
@@ -160,7 +164,10 @@ class _RecordatorioFormWidgetState extends State<RecordatorioFormWidget> {
           if (!(formStateRecord.currentState?.validate() ?? false)) {
             return;
           }
-          //TODO: actualizar un recordatorio : Falta actualizar los cambios al [recordatorioModel] local
+          recordatorioModel!.nombre = nombre.text;
+          recordatorioModel!.texto = text.text;
+          recordatorioModel!.isRecordatorio = isRecordatorio;
+          recordatorioModel!.fechaRecordatorio = fechaRecordatorio;
           showSnackBarWidget(
               context: context,
               navigatorPop: true,

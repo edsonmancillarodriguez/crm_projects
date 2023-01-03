@@ -128,9 +128,13 @@ class _EstudianteViewState extends State<EstudianteView> {
                                     'Seguro que desea eliminar al usuario ${listaEstudiantes[index].nombre}'),
                                 actions: [
                                   ElevatedButton(
-                                      onPressed: () => EstudianteController().eliminarEstudiante(listaEstudiantes[index].codigoDB!).then((value) {
-                                        Navigator.pop(context);
-                                      }),
+                                      onPressed: () => EstudianteController()
+                                              .eliminarEstudiante(
+                                                  listaEstudiantes[index]
+                                                      .codigoDB!)
+                                              .then((value) {
+                                            Navigator.pop(context);
+                                          }),
                                       child: const Text('SI, Eliminar')),
                                   ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
@@ -188,6 +192,5 @@ class _EstudianteViewState extends State<EstudianteView> {
         });
       }
     });
-
   }
 }

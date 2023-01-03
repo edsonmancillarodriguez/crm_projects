@@ -29,7 +29,6 @@ class EstudianteController {
   }
 
   Future<EstudianteModel?> verEstudiante(String codigoDB) async {
-    //esta retornando un EstudianteModel() ejemplo
     final ref = FirebaseDatabase.instance.ref();
     final value = (await ref.child('estudiantes/$codigoDB').get()).value
         as Map<String, dynamic>?;

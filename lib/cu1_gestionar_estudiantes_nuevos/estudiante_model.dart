@@ -55,8 +55,6 @@ class EstudianteModel {
   Future<String?> registrarEstudiante() async {
     //retorna null si registro correctamente o si no registro retorna el errorMessage
     try {
-      //TODO: Conectar a la base de datos y registrar... retorna null si registra correctamente
-
       DatabaseReference ref = FirebaseDatabase.instance.ref("estudiantes");
       codigoDB = generateCode();
       await ref.child(codigoDB!).set(toJson());
